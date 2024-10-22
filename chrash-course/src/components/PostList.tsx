@@ -1,32 +1,28 @@
 import classes from './Post.module.css';
 import Post from './Post.tsx';
 import NewPost from './NewPost.tsx';
-import { useState } from 'react';
 import Modal from './Modal.tsx';
+import { useState } from 'react';
 
 function PostList({ isPosting, onStopPosting }) {
-  const [text, setText] = useState('');
-  const [author, setAuthor] = useState('');
+  const [posts, setPosts] = useState([]);
 
-  function changeBody(event) {
-    setText(event.target.value);
-  }
-
-  function changeAuthor(event) {
-    setAuthor(event.target.value);
+  function addPostHandler(postData) {
+    setPosts(post => [postData, ...post]);
   }
 
   return (
     <>
       {isPosting && (
         <Modal onClose={onStopPosting}>
-          <NewPost onBodyChange={changeBody} onAuthorChage={changeAuthor} />
+          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
         </Modal>
       )}
 
       <ul className={classes.post}>
-        <Post author={author} body={text} />
-        <Post author='hss' body='react b' />
+        {posts.map(post => (
+          <Post key={post.body} author={post.author} body={post.body} />
+        ))}
       </ul>
     </>
   );
