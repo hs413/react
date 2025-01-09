@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback } from 'react';
 
 import Places from './components/Places.jsx';
 import Modal from './components/Modal.jsx';
@@ -13,12 +13,13 @@ function App() {
   const selectedPlace = useRef();
 
   const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState();
-
+ekwn
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const {
     fetchedData: userPlaces,
     isFetching,
+    setFetchedData: setUserPlaces,
     error
   } = useFetch(fetchUserPlaces, []);
 
@@ -75,7 +76,7 @@ function App() {
 
       setModalIsOpen(false);
     },
-    [userPlaces]
+    [userPlaces, setUserPlaces]
   );
 
   function handleError() {
