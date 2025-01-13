@@ -8,6 +8,8 @@ export default function NewEventsSection() {
   const {data, isPending, isError, error} = useQuery({
     queryKey: ['events'],
     queryFn: fetchEvents,
+    staleTime: 5000, // 자체 전송 전 기다릴 시간
+    // gcTime: 30000 // 캐시 저장 시간
   })
   let content;
 
