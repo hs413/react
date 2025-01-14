@@ -2,8 +2,8 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 
 import Modal from '../UI/Modal.jsx';
 import EventForm from './EventForm.jsx';
-import {useQuery} from "@tanstack/react-query";
-import {fetchEvent} from "../../util/http.js";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {fetchEvent, queryClient, updateEvent} from "../../util/http.js";
 import LoadingIndicator from "../UI/LoadingIndicator.jsx";
 
 export default function EditEvent() {
@@ -38,7 +38,36 @@ export default function EditEvent() {
     )
   }
 
-  function handleSubmit(formData) {}
+  const { mutate } = useMutation({
+    mutationFn: updateEvent,
+    onMutate: async (data) => {
+      const newEvent = data.event;
+
+      await queryClient.cancelQueries({queryKey: ['events', params.id]});
+      const previousEvent = queryClient.getQueryData(['events', params.id]);
+
+      queryClient.setQueriesData(['events', params.id], newEvent);
+
+      return {
+        previousEvent
+      }
+    },
+    onError: (error, data, context) => {
+      queryClient.setQueryData(['events', params.id], context.previousEvent);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['events', params.id]);
+    }
+
+  })
+
+  function handleSubmit(formData) {
+    mutate({
+      id: params.id,
+      event: formData,
+    })
+    navigate('../');
+  }
 
   function handleClose() {
     navigate('../');
