@@ -1,21 +1,21 @@
-import {useContext} from "react";
-import CartContext from "../store/CartContext.jsx";
 import Modal from "./UI/Modal.jsx";
 import {currencyFormatter} from "../utils/formatting.js";
 import Button from "./UI/Button.jsx";
-import UserProgressContext from "../store/UserProgressContext.jsx";
 import Input from "./Input.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import {userProgressActions} from "../store/userProgress.js";
 
 export default function Checkout() {
-  const cartCtx = useContext(CartContext);
-  const userProgressCtx = useContext(UserProgressContext);
+  const dispatch = useDispatch();
+  const { items } = useSelector(state => state.cart)
+  const { progress } = useSelector(state => state.userProgress)
 
-  const cartTotal = cartCtx.items.reduce(
+  const cartTotal = items.reduce(
       (acc, item) => acc + item.quantity * item.price, 0
   )
 
   function handleClose() {
-    userProgressCtx.hideCheckout();
+    dispatch(userProgressActions.hideCheckout())
   }
 
   function handleSubmit(event) {
@@ -31,7 +31,7 @@ export default function Checkout() {
       },
       body: JSON.stringify({
         order: {
-          items: cartCtx.items,
+          items: items,
           customer: customerData,
         }
       })
@@ -39,7 +39,7 @@ export default function Checkout() {
   }
 
   return (
-      <Modal open={userProgressCtx.progress === 'checkout'} onClose={handleClose}>
+      <Modal open={progress === 'checkout'} onClose={handleClose}>
 
         <form onSubmit={handleSubmit}>
           <h2>Checkout</h2>

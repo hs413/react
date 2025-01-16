@@ -1,18 +1,16 @@
 import logoImg from '../assets/logo.jpg';
 import Button from "./UI/Button.jsx";
-import {useContext} from "react";
-import CartContext from "../store/CartContext.jsx";
-import UserProgressContext from "../store/UserProgressContext.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import {userProgressActions} from "../store/userProgress.js";
 export default function Header() {
-  const cartCtx = useContext(CartContext);
-  const userProgressCtx = useContext(UserProgressContext)
+  const dispatch = useDispatch();
+  const items = useSelector(state => state.cart.items);
 
-  const totalCartItems = cartCtx.items.reduce((acc, item) => {
+  const totalCartItems = items.reduce((acc, item) => {
     return acc + item.quantity;
   }, 0)
   function handleShowCart() {
-    console.log('a')
-    userProgressCtx.showCart();
+    dispatch(userProgressActions.showCart())
   }
 
   return (
