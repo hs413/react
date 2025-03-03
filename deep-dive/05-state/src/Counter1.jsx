@@ -1,11 +1,19 @@
-import useCounter from "./useCouter";
+import {createStore} from "./store/counter";
+import {useStore} from "./hooks/useStore";
 
-export default function Counter1 ({ counter, inc }) {
+const store = createStore({ count: 0 })
+
+export default function Counter1 () {
+  const [state, setState] = useStore(store);
+
+  function handleClick() {
+    setState((prev) => ({count: prev.count + 1}))
+  }
 
   return (
       <>
-        <h3>Counter1: { counter }</h3>
-        <button onClick={inc}>+</button>
+        <h3>Counter1: { state.count }</h3>
+        <button onClick={handleClick}>+</button>
       </>
   )
 }
