@@ -1,26 +1,17 @@
+import {createSlice } from '@reduxjs/toolkit'
 
-export const createStore = (initialState) => {
-  console.log(initialState)
-  let state = initialState;
-
-  const callbacks = new Set();
-
-  const get = () => state
-
-  const set = (nextState = state) => {
-    state = nextState;
-    callbacks.forEach(callback => callback());
-
-    return state;
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { count: 0 },
+  reducers: {
+    inc(state) {
+      state.count += 1;
+    },
+    dec(state) {
+      state.count -= 1;
+    },
   }
+})
 
-  const subscribe = (callback) => {
-    callbacks.add(callback);
-
-    return () => {
-      callbacks.delete(callback);
-    }
-  }
-
-  return {get, set, subscribe}
-}
+export const counterActions = counterSlice.actions;
+export default counterSlice

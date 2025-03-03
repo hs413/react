@@ -1,12 +1,11 @@
-import Counter2 from "./Counter2";
-import Counter1 from "./Counter1";
-import useCounter from "./hooks/useCouter";
+import Counter from "./Counter";
 
 function App() {
+
   return (
       <>
-        <Counter2  />
-        <Counter1  />
+        <Counter name="counter1" />
+        <Counter name="counter2" />
       </>
   );
 }
