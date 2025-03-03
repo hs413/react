@@ -1,7 +1,6 @@
 import useCounter from "./useCouter";
 
-export default function Counter1 () {
-  const  { counter, inc } = useCounter();
+export default function Counter1 ({ counter, inc }) {
 
   return (
       <>
